@@ -918,6 +918,7 @@ if (HIDAPI_FOUND OR LibUSB_COMPILE_TEST_PASSED)
 endif()
 
 option(USE_READLINE "Build with GNU readline support." ON)
+option(EMBEDDED_ZMQ "Build zmq for embedded devices" OFF)
 option(EMBEDDED_WALLET "Build monero wallet library for embedded devices with minimum of dependencies")
 
 if (EMBEDDED_WALLET)
@@ -927,6 +928,10 @@ if (EMBEDDED_WALLET)
 endif()
 
 if(USE_READLINE AND NOT DEPENDS)
+  add_definitions(-DEMBEDDED_WALLET -DUSE_DEVICE_LEDGER=0)
+endif()
+
+if(USE_READLINE)
   find_package(Readline)
   if(READLINE_FOUND AND GNU_READLINE_FOUND)
     add_definitions(-DHAVE_READLINE)
@@ -958,8 +963,8 @@ if(CMAKE_C_COMPILER_ID STREQUAL "Clang" AND ARCH_WIDTH EQUAL "32" AND NOT IOS AN
 endif()
 
 if (NOT EMBEDDED_WALLET)
-find_path(ZMQ_INCLUDE_PATH zmq.h)
-find_library(ZMQ_LIB zmq)
+  find_path(ZMQ_INCLUDE_PATH zmq.hpp)
+  find_library(ZMQ_LIB zmq)
 endif()
 
 find_library(PGM_LIBRARY pgm)
@@ -974,7 +979,7 @@ endif()
 
 if (NOT EMBEDDED_WALLET)
   if(NOT ZMQ_INCLUDE_PATH)
-    message(FATAL_ERROR "Could not find required header zmq.h")
+    message(FATAL_ERROR "Could not find required header zmq.hpp")
   endif()
   if(NOT ZMQ_LIB)
     message(FATAL_ERROR "Could not find required libzmq")
