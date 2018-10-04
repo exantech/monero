@@ -34,7 +34,9 @@
 #include "misc_log_ex.h"
 #include "daemon/daemon.h"
 #include "rpc/daemon_handler.h"
+#ifndef NO_ZMQ
 #include "rpc/zmq_server.h"
+#endif
 
 #include "common/password.h"
 #include "common/util.h"
@@ -170,6 +172,7 @@ bool t_daemon::run(bool interactive)
     }
 
     cryptonote::rpc::DaemonHandler rpc_daemon_handler(mp_internals->core.get(), mp_internals->p2p.get());
+#ifndef NO_ZMQ
     cryptonote::rpc::ZmqServer zmq_server(rpc_daemon_handler);
 
     if (!zmq_rpc_disabled)
@@ -196,6 +199,7 @@ bool t_daemon::run(bool interactive)
     }
     else
       MINFO("ZMQ server disabled");
+#endif
 
     if (public_rpc_port > 0)
     {
@@ -208,8 +212,10 @@ bool t_daemon::run(bool interactive)
     if (rpc_commands)
       rpc_commands->stop_handling();
 
+#ifndef NO_ZMQ
     if (!zmq_rpc_disabled)
       zmq_server.stop();
+#endif
 
     for(auto& rpc : mp_internals->rpcs)
       rpc->stop();
