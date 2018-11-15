@@ -448,6 +448,13 @@ struct Wallet
         ConnectionStatus_WrongVersion
     };
 
+    enum RefreshType {
+        RefreshFull,
+        RefreshOptimizeCoinbase,
+        RefreshNoCoinbase,
+        RefreshFastSync
+    };
+
     virtual ~Wallet() = 0;
     virtual std::string seed() const = 0;
     virtual std::string getSeedLanguage() const = 0;
@@ -1055,6 +1062,9 @@ struct Wallet
      * \return Device they are on
      */
     virtual Device getDeviceType() const = 0;
+
+    virtual void setRefreshType(RefreshType type) = 0;
+    virtual RefreshType getRefreshType() const = 0;
 
     //! cold-device protocol key image sync
     virtual uint64_t coldKeyImageSync(uint64_t &spent, uint64_t &unspent) = 0;
