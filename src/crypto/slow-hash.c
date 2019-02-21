@@ -264,23 +264,6 @@ static void local_abort(const char *msg)
       *(dst) = SWAP64LE(*(dst)); \
   } while (0)
 
-#define VARIANT4_RANDOM_MATH_INIT() \
-  v4_reg r[9]; \
-  struct V4_Instruction code[NUM_INSTRUCTIONS_MAX + 1]; \
-  int jit = use_v4_jit(); \
-  do if (variant >= 4) \
-  { \
-    for (int i = 0; i < 4; ++i) \
-      V4_REG_LOAD(r + i, (uint8_t*)(state.hs.w + 12) + sizeof(v4_reg) * i); \
-    v4_random_math_init(code, height); \
-    if (jit) \
-    { \
-      int ret = v4_generate_JIT_code(code, hp_jitfunc, 4096); \
-      if (ret < 0) \
-        local_abort("Error generating CryptonightR code"); \
-    } \
-  } while (0)
-
 #define VARIANT4_RANDOM_MATH(a, b, r, _b, _b1) \
   do if (variant >= 4) \
   { \
@@ -518,6 +501,23 @@ STATIC INLINE int use_v4_jit(void)
   return 0;
 #endif
 }
+
+#define VARIANT4_RANDOM_MATH_INIT() \
+  v4_reg r[9]; \
+  struct V4_Instruction code[NUM_INSTRUCTIONS_MAX + 1]; \
+  int jit = use_v4_jit(); \
+  do if (variant >= 4) \
+  { \
+    for (int i = 0; i < 4; ++i) \
+      V4_REG_LOAD(r + i, (uint8_t*)(state.hs.w + 12) + sizeof(v4_reg) * i); \
+    v4_random_math_init(code, height); \
+    if (jit) \
+    { \
+      int ret = v4_generate_JIT_code(code, hp_jitfunc, 4096); \
+      if (ret < 0) \
+        local_abort("Error generating CryptonightR code"); \
+    } \
+  } while (0)
 
 STATIC INLINE int check_aes_hw(void)
 {
