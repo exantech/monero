@@ -407,8 +407,9 @@ struct WalletListener
     /**
      * @brief called by device when passphrase entry is needed
      */
-    virtual optional<std::string> onDevicePassphraseRequest(bool & on_device) {
-        on_device = true;
+    virtual optional<std::string> onDevicePassphraseRequest(bool on_device) {
+//        if (!on_device) throw std::runtime_error("Not supported");
+        // can't thow here because nodejs add-on builds w/ -fno-exceptions flag
         return optional<std::string>();
     }
 
