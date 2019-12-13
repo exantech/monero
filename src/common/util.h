@@ -30,6 +30,7 @@
 
 #pragma once 
 
+#include <boost/asio.hpp>
 #include <boost/thread/locks.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/optional.hpp>
@@ -252,4 +253,7 @@ namespace tools
   void clear_screen();
 
   std::vector<std::pair<std::string, size_t>> split_string_by_width(const std::string &s, size_t columns);
+
+  // parses strings like 127.0.0.1:8090
+  bool parseIpPort(const std::string& ip_port, boost::asio::ip::tcp::endpoint& endpoint);
 }
