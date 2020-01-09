@@ -1254,7 +1254,7 @@ namespace cryptonote
       // make sure that we aren't looking at a block with the 202612 block id but not the correct blobdata
       if (string_tools::pod_to_hex(res) == existing_block_id_202612)
       {
-        LOG_ERROR("Block with block id for 202612 but incorrect block blob hash found!");`
+        LOG_ERROR("Block with block id for 202612 but incorrect block blob hash found!");
         res = null_hash;
         return false;
       }
