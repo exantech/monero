@@ -1138,6 +1138,12 @@ namespace cryptonote
     const unsigned int unprunable_size = t.unprunable_size;
     const unsigned int prefix_size = t.prefix_size;
 
+    //debug my
+    LOG_ERROR("prefix size: " << prefix_size);
+    LOG_ERROR("unprunable size: " << unprunable_size);
+    LOG_ERROR("blob size: " << blob.size());
+    //end debug
+
     // base rct
     CHECK_AND_ASSERT_MES(prefix_size <= unprunable_size && unprunable_size <= blob.size(), false, "Inconsistent transaction prefix, unprunable and blob sizes");
     cryptonote::get_blob_hash(epee::span<const char>(blob.data() + prefix_size, unprunable_size - prefix_size), hashes[1]);
@@ -1248,7 +1254,7 @@ namespace cryptonote
       // make sure that we aren't looking at a block with the 202612 block id but not the correct blobdata
       if (string_tools::pod_to_hex(res) == existing_block_id_202612)
       {
-        LOG_ERROR("Block with block id for 202612 but incorrect block blob hash found!");
+        LOG_ERROR("Block with block id for 202612 but incorrect block blob hash found!");`
         res = null_hash;
         return false;
       }
