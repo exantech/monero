@@ -1142,6 +1142,9 @@ namespace cryptonote
     LOG_ERROR("prefix size: " << prefix_size);
     LOG_ERROR("unprunable size: " << unprunable_size);
     LOG_ERROR("blob size: " << blob.size());
+    if (!(prefix_size <= unprunable_size && unprunable_size <= blob.size())) {
+      LOG_ERROR("bad transaction: " << string_tools::buff_to_hex_nodelimer(blob));
+    }
     //end debug
 
     // base rct
