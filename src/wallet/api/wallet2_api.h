@@ -1380,6 +1380,8 @@ std::string chachaEncrypt(const std::string& msg, const std::string& key);
  */
 std::string chachaDecrypt(const std::string& cipher, const std::string& key);
 
+bool getTransactionHash(const std::string& txHex, std::string& hex);
+
 }
 
 namespace Bitmonero = Monero;

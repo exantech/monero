@@ -2642,6 +2642,35 @@ std::string chachaDecrypt(const std::string& cipher, const std::string& key)
     return msg;
 }
 
+bool getTransactionHash(const std::string& txHex, std::string& hex) {
+    try {
+        std::string bintx;
+        if (!epee::string_tools::parse_hexstr_to_binbuff(txHex, bintx)) {
+            LOG_ERROR("failed to parse transaction hex");
+            return false;
+        }
+
+        cryptonote::transaction tx;
+        std::stringstream ss;
+        ss << bintx;
+        binary_archive<false> ba(ss);
+        if (!::serialization::serialize(ba, tx)) {
+            LOG_ERROR("failed to parse transaction binary");
+            return false;
+        }
+
+        auto hash = cryptonote::get_transaction_hash(tx);
+        hex = epee::string_tools::pod_to_hex(hash);
+
+        return true;
+    } catch (const std::exception& e) {
+        LOG_ERROR("failed to calculate transaction hash: " << e.what());
+        return false;
+    }
+
+    return true;
+}
+
 } // namespace
 
 namespace Bitmonero = Monero;
