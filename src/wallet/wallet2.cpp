@@ -2644,7 +2644,7 @@ void wallet2::pull_fastsync_blocks(uint64_t start_height, uint64_t &blocks_start
   req.params.keys[0].created_at = m_refresh_from_block_height;
 
   m_daemon_rpc_mutex.lock();
-  bool r = net_utils::invoke_http_bin("/fastsync.bin", req, res, m_http_client, rpc_timeout);
+  bool r = net_utils::invoke_http_bin("/fastsync.bin", req, res, *m_http_client, rpc_timeout);
   m_daemon_rpc_mutex.unlock();
   THROW_WALLET_EXCEPTION_IF(!r, error::no_connection_to_daemon, "fastsync.bin");
   blocks.resize(res.result.blocks.size());
